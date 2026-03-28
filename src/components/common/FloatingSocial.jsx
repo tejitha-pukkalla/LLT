@@ -16,18 +16,18 @@ export default function FloatingSocial() {
 
   return (
     <>
-      {/* Desktop - Left Side */}
-      <div className="fixed left-4 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-3">
+      {/* Desktop - Right Side */}
+      <div className="fixed right-4 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-3">
         {socials.map((social, i) => (
           <motion.a
             key={i}
             href={social.href}
             target="_blank"
             rel="noopener noreferrer"
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.1 + 0.5 }}
-            whileHover={{ scale: 1.1, x: 5 }}
+            whileHover={{ scale: 1.1, x: -5 }}
             className="group relative"
           >
             <div 
@@ -35,7 +35,7 @@ export default function FloatingSocial() {
                 isDark ? 'bg-gray-800 hover:bg-gray-700' : 'bg-white hover:shadow-xl'
               }`}
               style={{ 
-                borderLeft: `3px solid ${social.color}` 
+                borderRight: `3px solid ${social.color}` 
               }}
             >
               <social.icon 
@@ -46,7 +46,7 @@ export default function FloatingSocial() {
             
             {/* Tooltip */}
             <span 
-              className="absolute left-full ml-3 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg text-xs font-medium text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+              className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg text-xs font-medium text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
               style={{ background: social.color }}
             >
               {social.label}

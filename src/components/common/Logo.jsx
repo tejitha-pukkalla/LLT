@@ -1,59 +1,3 @@
-// import React from 'react';
-// import { motion } from 'framer-motion';
-// import companyLogo from '../../assets/logo_transparent.png';
-
-// const sizes = {
-//   sm:  { height: 52  },
-//   md:  { height: 68  },  
-//   lg:  { height: 88  },
-//   xl:  { height: 110 },
-// };
-
-// export default function Logo({ size = 'md', animated = true, showText = true }) {
-//   const { height } = sizes[size] || sizes.md;
-
-//   return (
-//     <motion.div
-//       className="flex items-center"
-//       initial={animated ? { opacity: 0, scale: 0.9 } : false}
-//       animate={{ opacity: 1, scale: 1 }}
-//       transition={{ duration: 0.5, ease: 'easeOut' }}
-//     >
-//       <img
-//         src={companyLogo}
-//         alt="LogicLife Technologies"
-//         style={{
-//           height: `${height}px`,
-//           width: 'auto',
-//           objectFit: 'contain',
-         
-//         }}
-//       />
-//     </motion.div>
-//   );
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../theme/ThemeContext';
@@ -72,72 +16,67 @@ export default function Logo({ size = 'md', animated = true, showText = true }) 
   const { height, nameSize, subSize } = sizes[size] || sizes.md;
 
   return (
-    <motion.div
-      className="flex items-center gap-2"
-      initial={animated ? { opacity: 0, scale: 0.9 } : false}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-    >
-      {/* Logo Image */}
-      <img
-        src={companyLogo}
-        alt="LogicLife Technologies"
-        style={{
-          height: `${height}px`,
-          width: 'auto',
-          objectFit: 'contain',
-          // dark mode లో logo కొంచెం bright చేస్తాం
-          filter: isDark ? 'brightness(1.3) contrast(1.1)' : 'none',
-        }}
-      />
+   <motion.div
+  className="flex items-center"
+  initial={animated ? { opacity: 0, scale: 0.9 } : false}
+  animate={{ opacity: 1, scale: 1 }}
+  transition={{ duration: 0.5, ease: 'easeOut' }}
+>
+  {/* ✅ SINGLE WHITE BOX */}
+  <div
+    className="flex items-center gap-3"
+    style={{
+      background: isDark ? '#ffffff' : 'transparent',
+      padding: isDark ? '8px 14px' : '0px',
+      borderRadius: isDark ? '12px' : '0px',
+      boxShadow: isDark ? '0 6px 18px rgba(0,0,0,0.35)' : 'none',
+      transition: 'all 0.3s ease',
+    }}
+  >
+    {/* Logo */}
+  <img
+  src={companyLogo}
+  style={{
+    height: `${height + 10}px`, // 👈 increase manually
+  }}
+/>
 
-      {/* Company Name Text — dark mode లో highlighted */}
-      {showText && (
-        <div className="flex flex-col leading-tight">
-          <span
-            style={{
-              fontSize: nameSize,
-              fontWeight: 800,
-              letterSpacing: '-0.02em',
-              // ✅ Dark mode లో bright teal glow తో highlight
-              // Light mode లో original dark navy
-              color: isDark ? '#3DD6D6' : '#1B365D',
-              textShadow: isDark
-                ? '0 0 12px rgba(61, 214, 214, 0.6), 0 0 24px rgba(61, 214, 214, 0.3)'
-                : 'none',
-              transition: 'all 0.3s ease',
-            }}
-          >
-            LogicLife
-          </span>
-          <span
-            style={{
-              fontSize: nameSize,
-              fontWeight: 700,
-              letterSpacing: '-0.01em',
-              // ✅ Dark mode లో slightly dimmer teal
-              color: isDark ? '#2BB3B3' : '#2E8B8B',
-              textShadow: isDark
-                ? '0 0 10px rgba(43, 179, 179, 0.5)'
-                : 'none',
-              transition: 'all 0.3s ease',
-            }}
-          >
-            Technologies
-          </span>
-          <span
-            style={{
-              fontSize: subSize,
-              fontStyle: 'italic',
-              opacity: isDark ? 0.7 : 0.6,
-              color: isDark ? '#8ECFCF' : '#666',
-              transition: 'all 0.3s ease',
-            }}
-          >
-            Where clarity meets tech
-          </span>
-        </div>
-      )}
-    </motion.div>
+    {/* Text INSIDE box */}
+    {showText && (
+      <div className="flex flex-col leading-tight">
+        <span
+          style={{
+            fontSize: nameSize,
+            fontWeight: 800,
+            letterSpacing: '-0.02em',
+            color: '#1B365D', // ✅ dark text for white bg
+          }}
+        >
+          LogicLife
+        </span>
+        <span
+          style={{
+            fontSize: nameSize,
+            fontWeight: 700,
+            letterSpacing: '-0.01em',
+            color: '#2E8B8B',
+          }}
+        >
+          Technologies
+        </span>
+        <span
+          style={{
+            fontSize: subSize,
+            fontStyle: 'italic',
+            opacity: 0.7,
+            color: '#666',
+          }}
+        >
+          Where clarity meets tech
+        </span>
+      </div>
+    )}
+  </div>
+</motion.div>
   );
 }

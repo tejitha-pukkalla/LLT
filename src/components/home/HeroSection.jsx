@@ -1,106 +1,198 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Sparkles, Play } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useTheme } from '../theme/ThemeContext';
 import { createPageUrl } from '@/utils';
-import * as THREE from 'three';
+import companyLogo from '../../assets/logo_transparent.png';
+
+// ✅ Logo-matching circuit ring animation — logo style ki match ayye SVG animation
+function CircuitRingAnimation({ colors, isDark }) {
+  const primaryColor = '#3BB3B3';
+  const secondaryColor = '#5BC8D4';
+
+  const circuitArcs = useMemo(() => {
+    const arcs = [];
+    const numArcs = 6;
+    for (let i = 0; i < numArcs; i++) {
+      const radius = 130 + i * 22;
+      const startAngle = -55 + i * 10;
+      const endAngle = 195 + i * 7;
+      const numDots = 4 + i;
+      const dots = [];
+      for (let d = 0; d <= numDots; d++) {
+        const angle = startAngle + (d / numDots) * (endAngle - startAngle);
+        const rad = (angle * Math.PI) / 180;
+        dots.push({
+          x: 250 + radius * Math.cos(rad),
+          y: 250 + radius * Math.sin(rad),
+          angle,
+        });
+      }
+      arcs.push({ radius, startAngle, endAngle, dots, delay: i * 0.3 });
+    }
+    return arcs;
+  }, []);
+
+  return (
+    <div className="relative w-full h-[500px] flex items-center justify-center">
+      <svg viewBox="0 0 500 500" className="w-full h-full" style={{ overflow: 'visible' }}>
+        <defs>
+          <radialGradient id="heroGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor={primaryColor} stopOpacity="0.18" />
+            <stop offset="100%" stopColor={primaryColor} stopOpacity="0" />
+          </radialGradient>
+          <filter id="heroGlowFilter">
+            <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        {/* Soft background glow */}
+        <circle cx="250" cy="250" r="210" fill="url(#heroGlow)" />
+
+        {/* Circuit arcs — each rotates independently */}
+        {circuitArcs.map((arc, i) => {
+          const rad1 = (arc.startAngle * Math.PI) / 180;
+          const rad2 = (arc.endAngle * Math.PI) / 180;
+          const x1 = 250 + arc.radius * Math.cos(rad1);
+          const y1 = 250 + arc.radius * Math.sin(rad1);
+          const x2 = 250 + arc.radius * Math.cos(rad2);
+          const y2 = 250 + arc.radius * Math.sin(rad2);
+          const largeArc = arc.endAngle - arc.startAngle > 180 ? 1 : 0;
+          const isEven = i % 2 === 0;
+
+          return (
+            <motion.g
+              key={i}
+              animate={{ rotate: isEven ? 360 : -360 }}
+              transition={{ duration: 16 + i * 5, repeat: Infinity, ease: 'linear' }}
+              style={{ originX: '250px', originY: '250px' }}
+            >
+              {/* Arc stroke */}
+              <path
+                d={`M ${x1} ${y1} A ${arc.radius} ${arc.radius} 0 ${largeArc} 1 ${x2} ${y2}`}
+                fill="none"
+                stroke={i < 3 ? primaryColor : secondaryColor}
+                strokeWidth={i === 0 ? 1.8 : 1.2}
+                strokeOpacity={0.55 - i * 0.05}
+                filter="url(#heroGlowFilter)"
+              />
+
+              {/* Dots at each node point */}
+              {arc.dots.map((dot, d) => {
+                const isTerminal = d === 0 || d === arc.dots.length - 1;
+                return (
+                  <motion.circle
+                    key={d}
+                    cx={dot.x}
+                    cy={dot.y}
+                    r={isTerminal ? 4 : 2.5}
+                    fill={isTerminal ? primaryColor : secondaryColor}
+                    fillOpacity={0.95}
+                    filter="url(#heroGlowFilter)"
+                    animate={{ opacity: [0.35, 1, 0.35] }}
+                    transition={{
+                      duration: 2 + d * 0.35,
+                      repeat: Infinity,
+                      delay: arc.delay + d * 0.18,
+                      ease: 'easeInOut',
+                    }}
+                  />
+                );
+              })}
+
+              {/* Short connector lines from terminal dots (like logo) */}
+              {[
+                { dot: arc.dots[0], angle: arc.startAngle - 18 },
+                { dot: arc.dots[arc.dots.length - 1], angle: arc.endAngle + 18 },
+              ].map(({ dot, angle }, d) => {
+                const lineRad = (angle * Math.PI) / 180;
+                const len = 16;
+                return (
+                  <line
+                    key={d}
+                    x1={dot.x}
+                    y1={dot.y}
+                    x2={dot.x + len * Math.cos(lineRad)}
+                    y2={dot.y + len * Math.sin(lineRad)}
+                    stroke={primaryColor}
+                    strokeWidth="1"
+                    strokeOpacity="0.55"
+                  />
+                );
+              })}
+            </motion.g>
+          );
+        })}
+
+        {/* Center circle with logo + company name */}
+        <motion.g
+          animate={{ scale: [1, 1.03, 1] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+          style={{ originX: '250px', originY: '250px' }}
+        >
+          {/* White/dark circle background — bigger to fit full logo text */}
+          <circle
+  cx="250"
+  cy="250"
+  r="115"
+  fill={isDark ? '#ffffff' : '#ffffff'} // ✅ always white
+  fillOpacity="1"
+/>
+          <circle
+            cx="250" cy="250" r="115"
+            fill="none"
+            stroke={primaryColor}
+            strokeWidth="1.5"
+            strokeOpacity="0.45"
+          />
+          {/* Full logo image — icon + LogicLife Technologies + tagline */}
+          <image
+            href={companyLogo}
+            x="130" y="148"
+            width="240" height="204"
+            style={{ filter: isDark ? 'brightness(1.3) contrast(1.1)' : 'none' }}
+          />
+        </motion.g>
+
+        {/* Outer floating particles */}
+        {[...Array(16)].map((_, i) => {
+          const angle = (i / 16) * 360;
+          const r = 198 + (i % 4) * 14;
+          const rad = (angle * Math.PI) / 180;
+          return (
+            <motion.circle
+              key={i}
+              cx={250 + r * Math.cos(rad)}
+              cy={250 + r * Math.sin(rad)}
+              r={1.8}
+              fill={primaryColor}
+              animate={{ opacity: [0, 0.85, 0] }}
+              transition={{
+                duration: 2.8,
+                repeat: Infinity,
+                delay: i * 0.2,
+                ease: 'easeInOut',
+              }}
+            />
+          );
+        })}
+      </svg>
+    </div>
+  );
+}
 
 export default function HeroSection() {
   const { isDark, colors } = useTheme();
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    if (!canvasRef.current) return;
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ 
-      canvas: canvasRef.current, 
-      alpha: true,
-      antialias: true 
-    });
-
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    // Create floating particles
-    const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 500;
-    const posArray = new Float32Array(particlesCount * 3);
-
-    for (let i = 0; i < particlesCount * 3; i++) {
-      posArray[i] = (Math.random() - 0.5) * 10;
-    }
-
-    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-
-    const particlesMaterial = new THREE.PointsMaterial({
-      size: 0.02,
-      color: isDark ? 0x3BB3B3 : 0x2E8B8B,
-      transparent: true,
-      opacity: 0.6
-    });
-
-    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(particlesMesh);
-
-    // Create glowing sphere
-    const sphereGeometry = new THREE.SphereGeometry(1.5, 32, 32);
-    const sphereMaterial = new THREE.MeshBasicMaterial({
-      color: isDark ? 0x2E8B8B : 0x1B365D,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.3
-    });
-    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-    sphere.position.set(3, 0, -2);
-    scene.add(sphere);
-
-    // Create torus
-    const torusGeometry = new THREE.TorusGeometry(2, 0.05, 16, 100);
-    const torusMaterial = new THREE.MeshBasicMaterial({
-      color: 0x3BB3B3,
-      transparent: true,
-      opacity: 0.4
-    });
-    const torus = new THREE.Mesh(torusGeometry, torusMaterial);
-    torus.position.set(3, 0, -2);
-    torus.rotation.x = Math.PI / 4;
-    scene.add(torus);
-
-    camera.position.z = 5;
-
-    const animate = () => {
-      requestAnimationFrame(animate);
-      particlesMesh.rotation.y += 0.001;
-      particlesMesh.rotation.x += 0.0005;
-      sphere.rotation.y += 0.005;
-      sphere.rotation.x += 0.002;
-      torus.rotation.z += 0.003;
-      renderer.render(scene, camera);
-    };
-
-    animate();
-
-    const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      renderer.dispose();
-    };
-  }, [isDark]);
 
   const [currentWordIndex, setCurrentWordIndex] = React.useState(0);
   const rotatingWords = ['Web', 'Mobile', 'App'];
-  
+
   React.useEffect(() => {
     const interval = setInterval(() => {
       setCurrentWordIndex((prev) => (prev + 1) % rotatingWords.length);
@@ -112,19 +204,14 @@ export default function HeroSection() {
     <section className={`relative min-h-screen flex items-center overflow-hidden ${
       isDark ? 'bg-gray-950' : 'bg-gradient-to-br from-slate-50 via-white to-slate-100'
     }`}>
-      {/* 3D Canvas Background */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 pointer-events-none"
-      />
 
       {/* Gradient Overlays */}
       <div className="absolute inset-0 pointer-events-none">
-        <div 
+        <div
           className="absolute top-0 left-0 w-[600px] h-[600px] rounded-full blur-[120px] opacity-20"
           style={{ background: colors.secondary }}
         />
-        <div 
+        <div
           className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full blur-[100px] opacity-15"
           style={{ background: colors.accent }}
         />
@@ -132,6 +219,7 @@ export default function HeroSection() {
 
       <div className="relative max-w-7xl mx-auto px-4 lg:px-8 pt-32 pb-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
+
           {/* Left Content */}
           <div className="space-y-8">
             {/* Badge */}
@@ -147,7 +235,7 @@ export default function HeroSection() {
               <span className="text-sm font-medium">Transforming Ideas into Reality</span>
             </motion.div>
 
-            {/* Main Heading with Rotating Words */}
+            {/* Heading */}
             <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight ${
               isDark ? 'text-white' : 'text-gray-900'
             }`}>
@@ -158,8 +246,8 @@ export default function HeroSection() {
               >
                 Top{' '}
               </motion.span>
-              
-              {/* Rotating Word Container */}
+
+              {/* Rotating Word */}
               <span className="inline-block relative h-[1.2em] w-[220px] align-middle">
                 <AnimatePresence mode="wait">
                   <motion.span
@@ -169,13 +257,13 @@ export default function HeroSection() {
                     exit={{ opacity: 0, y: -30 }}
                     transition={{ duration: 0.5, ease: "easeInOut" }}
                     className="absolute left-0 top-0"
-                    style={{ color: colors.secondary }}
+                    style={{ color: '#2E8B8B' }}
                   >
                     {rotatingWords[currentWordIndex]}
                   </motion.span>
                 </AnimatePresence>
               </span>
-              
+
               <motion.span
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -194,7 +282,7 @@ export default function HeroSection() {
                 isDark ? 'text-gray-400' : 'text-gray-600'
               }`}
             >
-              We transform ideas into scalable, secure, and high-performance digital solutions. 
+              We transform ideas into scalable, secure, and high-performance digital solutions.
               From concept to launch, we build products that drive business growth.
             </motion.p>
 
@@ -206,24 +294,22 @@ export default function HeroSection() {
               className="flex flex-wrap gap-4"
             >
               <Link to={createPageUrl('Contact')}>
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   className="h-14 px-8 rounded-full text-white font-medium group"
-                  style={{
-                    background: `linear-gradient(135deg, ${colors.secondary}, ${colors.accent})`
-                  }}
+                  style={{ background: `linear-gradient(135deg, ${colors.secondary}, ${colors.accent})` }}
                 >
                   Get a Free Consultation
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
               <Link to={createPageUrl('Portfolio')}>
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   variant="outline"
                   className={`h-14 px-8 rounded-full font-medium ${
-                    isDark 
-                      ? 'border-white/20 text-white hover:bg-white/10' 
+                    isDark
+                      ? 'border-white/20 text-white hover:bg-white/10'
                       : 'border-gray-300 text-gray-700 hover:bg-gray-100'
                   }`}
                 >
@@ -246,10 +332,7 @@ export default function HeroSection() {
                 { value: '8+', label: 'Years Experience' }
               ].map((stat, i) => (
                 <div key={i}>
-                  <div 
-                    className="text-3xl font-bold"
-                    style={{ color: colors.secondary }}
-                  >
+                  <div className="text-3xl font-bold" style={{ color: colors.secondary }}>
                     {stat.value}
                   </div>
                   <div className={`text-sm ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
@@ -260,7 +343,7 @@ export default function HeroSection() {
             </motion.div>
           </div>
 
-          {/* Right Side - Floating UI Elements */}
+          {/* Right Side — Circuit Ring Animation matching the logo */}
           <div className="relative hidden lg:block">
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
@@ -268,16 +351,16 @@ export default function HeroSection() {
               transition={{ delay: 0.5, duration: 0.8 }}
               className="relative"
             >
-              {/* Floating Cards */}
+              {/* Floating card — top right */}
               <motion.div
                 animate={{ y: [0, -20, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className={`absolute -top-10 right-0 p-4 rounded-2xl shadow-2xl ${
+                className={`absolute -top-10 right-0 z-10 p-4 rounded-2xl shadow-2xl ${
                   isDark ? 'bg-gray-800' : 'bg-white'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div 
+                  <div
                     className="w-10 h-10 rounded-xl flex items-center justify-center"
                     style={{ background: `linear-gradient(135deg, ${colors.secondary}, ${colors.accent})` }}
                   >
@@ -294,17 +377,18 @@ export default function HeroSection() {
                 </div>
               </motion.div>
 
+              {/* Floating card — bottom left */}
               <motion.div
                 animate={{ y: [0, 15, 0] }}
                 transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                className={`absolute bottom-10 -left-10 p-4 rounded-2xl shadow-2xl ${
+                className={`absolute bottom-10 -left-10 z-10 p-4 rounded-2xl shadow-2xl ${
                   isDark ? 'bg-gray-800' : 'bg-white'
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <div className="flex -space-x-2">
                     {[1, 2, 3].map((i) => (
-                      <div 
+                      <div
                         key={i}
                         className="w-8 h-8 rounded-full border-2 border-white bg-gradient-to-br from-teal-400 to-cyan-500"
                       />
@@ -321,39 +405,11 @@ export default function HeroSection() {
                 </div>
               </motion.div>
 
-              {/* Main Illustration Area */}
-              <div 
-                className="w-full h-[500px] rounded-3xl relative overflow-hidden"
-                style={{
-                  background: isDark 
-                    ? `linear-gradient(135deg, ${colors.primary}40, ${colors.secondary}20)`
-                    : `linear-gradient(135deg, ${colors.secondary}10, ${colors.accent}10)`
-                }}
-              >
-                {/* Animated Circles */}
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-0 flex items-center justify-center"
-                >
-                  <div 
-                    className="w-64 h-64 rounded-full border-2 border-dashed"
-                    style={{ borderColor: `${colors.secondary}40` }}
-                  />
-                </motion.div>
-                <motion.div
-                  animate={{ rotate: -360 }}
-                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-0 flex items-center justify-center"
-                >
-                  <div 
-                    className="w-80 h-80 rounded-full border"
-                    style={{ borderColor: `${colors.accent}30` }}
-                  />
-                </motion.div>
-              </div>
+              {/* ✅ Logo-matching circuit ring animation */}
+              <CircuitRingAnimation colors={colors} isDark={isDark} />
             </motion.div>
           </div>
+
         </div>
       </div>
 
@@ -381,22 +437,3 @@ export default function HeroSection() {
     </section>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

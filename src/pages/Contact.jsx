@@ -7,7 +7,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTheme } from '../components/theme/ThemeContext';
 import { apiClient } from "@/api/apiClient";
 import { toast } from 'sonner';
@@ -280,23 +279,44 @@ export default function Contact() {
                   </div>
                 </div>
 
-                <Select 
-                  value={formData.service_interested} 
-                  onValueChange={(value) => setFormData({ ...formData, service_interested: value })}
-                >
-                  <SelectTrigger className={`h-12 rounded-xl ${
-                    isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-                  }`}>
-                    <SelectValue placeholder="Service Interested In" />
-                  </SelectTrigger>
-                  <SelectContent>
+                {/* FIXED: Native <select> — browser handles dropdown outside DOM flow, zero overlap issues */}
+                <div className="relative">
+                  <select
+                    value={formData.service_interested}
+                    onChange={(e) => setFormData({ ...formData, service_interested: e.target.value })}
+                    className={`w-full h-12 px-4 pr-10 rounded-xl border text-sm appearance-none cursor-pointer focus:outline-none focus:ring-2 transition-colors ${
+                      isDark
+                        ? 'bg-gray-800 border-gray-700 focus:ring-gray-600'
+                        : 'bg-white border-gray-200 focus:ring-gray-300'
+                    } ${
+                      !formData.service_interested
+                        ? 'text-gray-400'
+                        : isDark ? 'text-white' : 'text-gray-900'
+                    }`}
+                  >
+                    <option value="" disabled hidden>Service Interested In</option>
                     {services.map((service) => (
-                      <SelectItem key={service.value} value={service.value}>
+                      <option
+                        key={service.value}
+                        value={service.value}
+                        className={isDark ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}
+                      >
                         {service.label}
-                      </SelectItem>
+                      </option>
                     ))}
-                  </SelectContent>
-                </Select>
+                  </select>
+                  {/* Custom chevron */}
+                  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                    <svg
+                      className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
 
                 <Textarea
                   placeholder="Tell us about your project..."
