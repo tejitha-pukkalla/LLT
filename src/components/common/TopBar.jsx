@@ -1,204 +1,169 @@
-// import React from 'react';
-// import { motion } from 'framer-motion';
-// import { Phone, Mail, Instagram, Linkedin, Facebook, MessageCircle } from 'lucide-react';
-// import { useTheme } from '../theme/ThemeContext';
-
-// export default function TopBar() {
-//   const { isDark, colors } = useTheme();
-  
-//   const tickerText = "Transforming Ideas into Digital Reality • Web Development • Mobile Apps • Software Solutions • Digital Marketing • Cloud Services • ";
-  
-//   return (
-//     <div 
-//       className="relative overflow-hidden py-2 px-4"
-//       style={{ 
-//         background: isDark 
-//           ? `linear-gradient(90deg, ${colors.primary}, ${colors.secondary})` 
-//           : `linear-gradient(90deg, ${colors.primary}, ${colors.secondary})`
-//       }}
-//     >
-//       <div className="max-w-7xl mx-auto flex items-center justify-between relative z-10">
-//         {/* Contact Info */}
-//         <div className="hidden md:flex items-center gap-6 text-white/90 text-sm">
-//           <a 
-//             href="tel:+919876543210" 
-//             className="flex items-center gap-2 hover:text-white transition-colors"
-//           >
-//             <Phone className="w-3.5 h-3.5" />
-//             <span>+91 98765 43210</span>
-//           </a>
-//           <a 
-//             href="mailto:info@logiclife.tech" 
-//             className="flex items-center gap-2 hover:text-white transition-colors"
-//           >
-//             <Mail className="w-3.5 h-3.5" />
-//             <span>info@logiclife.tech</span>
-//           </a>
-//         </div>
-
-//         {/* Animated Ticker - Center */}
-//         <div className="absolute left-1/2 -translate-x-1/2 overflow-hidden w-1/3 hidden lg:block">
-//           <motion.div
-//             className="whitespace-nowrap text-white/70 text-xs"
-//             animate={{ x: [0, -500] }}
-//             transition={{ 
-//               duration: 15, 
-//               repeat: Infinity, 
-//               ease: "linear" 
-//             }}
-//           >
-//             {tickerText.repeat(3)}
-//           </motion.div>
-//         </div>
-
-//         {/* Social Icons */}
-//         <div className="flex items-center gap-3 ml-auto">
-//           {[
-//             { icon: MessageCircle, href: "https://wa.me/919876543210", label: "WhatsApp" },
-//             { icon: Instagram, href: "#", label: "Instagram" },
-//             { icon: Linkedin, href: "#", label: "LinkedIn" },
-//             { icon: Facebook, href: "#", label: "Facebook" }
-//           ].map((social, i) => (
-//             <motion.a
-//               key={i}
-//               href={social.href}
-//               target="_blank"
-//               rel="noopener noreferrer"
-//               className="text-white/80 hover:text-white transition-all hover:scale-110"
-//               whileHover={{ y: -2 }}
-//               aria-label={social.label}
-//             >
-//               <social.icon className="w-4 h-4" />
-//             </motion.a>
-//           ))}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Phone, Mail, Instagram, Linkedin, Facebook, MessageCircle } from 'lucide-react';
 import { useTheme } from '../theme/ThemeContext';
 
-const TICKER = 'Transforming Ideas into Digital Reality \u2022 Web Development \u2022 Mobile Apps \u2022 Software Solutions \u2022 Digital Marketing \u2022 Cloud Services \u2022\u00a0\u00a0\u00a0';
+const UNIT = 'Transforming Ideas into Digital Reality \u2022 Web Development \u2022 Mobile Apps \u2022 Software Solutions \u2022 Digital Marketing \u2022 Cloud Services \u2022\u00a0\u00a0\u00a0\u00a0';
+
+const SOCIALS = [
+  { Icon: MessageCircle, href: 'https://wa.me/919876543210', label: 'WhatsApp' },
+  { Icon: Instagram,     href: '#',                           label: 'Instagram' },
+  { Icon: Linkedin,      href: '#',                           label: 'LinkedIn'  },
+  { Icon: Facebook,      href: '#',                           label: 'Facebook'  },
+];
 
 export default function TopBar() {
   const { colors } = useTheme();
 
-  const SOCIALS = [
-    { Icon: MessageCircle, href: 'https://wa.me/919876543210', label: 'WhatsApp' },
-    { Icon: Instagram,     href: '#',                           label: 'Instagram' },
-    { Icon: Linkedin,      href: '#',                           label: 'LinkedIn'  },
-    { Icon: Facebook,      href: '#',                           label: 'Facebook'  },
-  ];
+  const wrapRef  = useRef(null); // overflow:hidden ticker container
+  const trackRef = useRef(null); // the moving strip
+  const styleRef = useRef(null); // injected <style> tag
+
+  useEffect(() => {
+    // Build a hidden probe span to measure one UNIT's real pixel width,
+    // then populate the track with enough repetitions so it always
+    // overflows the container, then inject a pixel-exact @keyframes rule.
+    const probe = document.createElement('span');
+    probe.style.cssText =
+      'position:fixed;top:-9999px;left:-9999px;visibility:hidden;' +
+      'font-size:12px;white-space:nowrap;pointer-events:none;';
+    probe.textContent = UNIT;
+    document.body.appendChild(probe);
+
+    function build() {
+      if (!wrapRef.current || !trackRef.current) return;
+
+      const containerW = wrapRef.current.offsetWidth;
+      const unitW      = probe.offsetWidth;
+      if (!containerW || !unitW) return;
+
+      // Each "set" must be at least as wide as the container so no gap ever shows.
+      const reps = Math.ceil(containerW / unitW) + 2;
+      const setText = UNIT.repeat(reps);
+
+      // Two identical sets — animation scrolls exactly one set width (px),
+      // then resets: set-2 lines up perfectly with where set-1 started.
+      trackRef.current.innerHTML =
+        `<span class="_tb_set">${setText}</span>` +
+        `<span class="_tb_set">${setText}</span>`;
+
+      const setW = trackRef.current.querySelector('._tb_set').offsetWidth;
+
+      // Inject / replace the keyframe rule
+      if (!styleRef.current) {
+        styleRef.current = document.createElement('style');
+        document.head.appendChild(styleRef.current);
+      }
+      styleRef.current.textContent = `
+        @keyframes _tb_scroll {
+          from { transform: translateX(0px); }
+          to   { transform: translateX(-${setW}px); }
+        }
+        #_tb_track {
+          display: inline-flex;
+          white-space: nowrap;
+          will-change: transform;
+          animation: _tb_scroll 25s linear infinite;
+        }
+        #_tb_track ._tb_set {
+          font-size: 12px;
+          color: rgba(255,255,255,0.75);
+          pointer-events: none;
+          flex-shrink: 0;
+        }
+        #_tb_wrap:hover #_tb_track {
+          animation-play-state: paused !important;
+        }
+      `;
+    }
+
+    // Small delay so the DOM has laid out and offsetWidth is reliable
+    const t = setTimeout(build, 60);
+    window.addEventListener('resize', build);
+
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener('resize', build);
+      document.body.removeChild(probe);
+      if (styleRef.current) styleRef.current.textContent = '';
+    };
+  }, []);
 
   return (
     <>
       <style>{`
-        @keyframes _tb_scroll {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-50%); }
+        ._tb_contact a {
+          display: flex; align-items: center; gap: 5px;
+          color: rgba(255,255,255,0.9); font-size: 13px; text-decoration: none;
+          transition: color 0.15s;
         }
-        ._tb_track {
-          display: inline-block;
-          white-space: nowrap;
-          animation: _tb_scroll 22s linear infinite;
+        ._tb_contact a:hover { color: #fff; }
+        ._tb_divider {
+          width: 1px; height: 14px;
+          background: rgba(255,255,255,0.25);
+          flex-shrink: 0; margin: 0 12px;
         }
-        ._tb_mask:hover ._tb_track {
-          animation-play-state: paused;
+        ._tb_soc {
+          color: rgba(255,255,255,0.8); text-decoration: none;
+          display: flex; align-items: center;
+          transition: color 0.18s, transform 0.18s;
         }
-        ._tb_social:hover {
-          color: #ffffff !important;
-          transform: translateY(-2px);
-        }
-        @media (max-width: 767px) {
+        ._tb_soc:hover { color: #fff !important; transform: translateY(-2px); }
+        @media (max-width: 768px) {
           ._tb_contact { display: none !important; }
-          ._tb_mask    { display: none !important; }
+          ._tb_divider  { display: none !important; }
         }
       `}</style>
 
       <div style={{
         background: `linear-gradient(90deg, ${colors.primary}, ${colors.secondary})`,
-        overflow: 'hidden',
-        width: '100%',
-        boxSizing: 'border-box',
+        width: '100%', overflow: 'hidden', boxSizing: 'border-box',
       }}>
         <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          padding: '6px 20px',
-          boxSizing: 'border-box',
-          width: '100%',
+          display: 'flex', alignItems: 'center',
+          padding: '7px 20px', width: '100%', boxSizing: 'border-box',
         }}>
 
-          {/* LEFT: contact */}
+          {/* LEFT: Contact info */}
           <div className="_tb_contact" style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '24px',
-            flexShrink: 0,
-            whiteSpace: 'nowrap',
+            display: 'flex', alignItems: 'center', gap: '18px',
+            flexShrink: 0, whiteSpace: 'nowrap',
           }}>
-            <a href="tel:+919876543210" style={{ display:'flex', alignItems:'center', gap:'6px', color:'rgba(255,255,255,0.9)', fontSize:'13px', textDecoration:'none' }}>
-              <Phone size={13} /> <span>+91 98765 43210</span>
+            <a href="tel:+919876543210">
+              <Phone size={13} /><span>+91 98765 43210</span>
             </a>
-            <a href="mailto:info@logiclife.tech" style={{ display:'flex', alignItems:'center', gap:'6px', color:'rgba(255,255,255,0.9)', fontSize:'13px', textDecoration:'none' }}>
-              <Mail size={13} /> <span>info@logiclife.tech</span>
+            <a href="mailto:info@logiclife.tech">
+              <Mail size={13} /><span>info@logiclife.tech</span>
             </a>
           </div>
 
-          {/* CENTER: ticker — fills every remaining pixel */}
-          <div className="_tb_mask" style={{
-            flex: '1 1 0',
-            minWidth: 0,
-            overflow: 'hidden',
-            margin: '0 16px',
-            cursor: 'default',
-          }}>
-            <div className="_tb_track" style={{ fontSize:'12px', color:'rgba(255,255,255,0.65)' }}>
-              {TICKER}{TICKER}{TICKER}{TICKER}
-            </div>
+          {/* thin separator */}
+          <div className="_tb_divider" />
+
+          {/* CENTER: Ticker — takes all remaining space */}
+          <div
+            id="_tb_wrap"
+            ref={wrapRef}
+            style={{
+              flex: '1 1 0',
+              minWidth: 0,
+              overflow: 'hidden',
+              // cursor:text so hover is clearly interactive (NOT cursor:default)
+              cursor: 'text',
+            }}
+          >
+            <div id="_tb_track" ref={trackRef} />
           </div>
 
-          {/* RIGHT: social icons — pushed to far right, never shrinks */}
+          {/* thin separator */}
+          <div className="_tb_divider" />
+
+          {/* RIGHT: Social icons */}
           <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '14px',
-            flexShrink: 0,
-            marginLeft: 'auto',
+            display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0,
           }}>
             {SOCIALS.map(({ Icon, href, label }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                className="_tb_social"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  color: 'rgba(255,255,255,0.8)',
-                  transition: 'color 0.2s, transform 0.2s',
-                  textDecoration: 'none',
-                }}
-              >
+              <a key={label} href={href} target="_blank"
+                rel="noopener noreferrer" aria-label={label} className="_tb_soc">
                 <Icon size={16} />
               </a>
             ))}
