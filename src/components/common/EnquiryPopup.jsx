@@ -4,20 +4,21 @@ import { X, Send, Loader2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTheme } from '../theme/ThemeContext';
 import Logo from './Logo';
 import { apiClient } from "@/api/apiClient";
 import { toast } from 'sonner';
 
 const services = [
-  { value: 'web_development',      label: 'Web Development' },
-  { value: 'mobile_app',           label: 'Mobile App Development' },
+  { value: 'web_development', label: 'Web Development' },
+  { value: 'mobile_app', label: 'Mobile App Development' },
   { value: 'software_development', label: 'Software Development' },
-  { value: 'digital_marketing',    label: 'Digital Marketing' },
-  { value: 'ui_ux_design',         label: 'UI/UX Design' },
-  { value: 'cloud_services',       label: 'Cloud Services' },
-  { value: 'support_maintenance',  label: 'Support & Maintenance' },
-  { value: 'other',                label: 'Other' },
+  { value: 'digital_marketing', label: 'Digital Marketing' },
+  { value: 'ui_ux_design', label: 'UI/UX Design' },
+  { value: 'cloud_services', label: 'Cloud Services' },
+  { value: 'support_maintenance', label: 'Support & Maintenance' },
+  { value: 'other', label: 'Other' },
 ];
 
 export default function EnquiryPopup() {
@@ -35,7 +36,9 @@ export default function EnquiryPopup() {
   useEffect(() => {
     const hasSeenPopup = sessionStorage.getItem('enquiry_popup_seen');
     if (!hasSeenPopup) {
-      const timer = setTimeout(() => setIsOpen(true), 3000);
+      const timer = setTimeout(() => {
+        setIsOpen(true);
+      }, 3000); // Show after 3 seconds
       return () => clearTimeout(timer);
     }
   }, []);
@@ -48,15 +51,16 @@ export default function EnquiryPopup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await apiClient.post('/enquiries', { ...formData, source: 'popup' });
+
+    await apiClient.post('/enquiries', {
+      ...formData,
+      source: 'popup'
+    });
+
     toast.success('Thank you! We will get back to you soon.');
     setIsSubmitting(false);
     handleClose();
   };
-
-  const inputClass = `h-12 rounded-xl ${
-    isDark ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200'
-  }`;
 
   return (
     <AnimatePresence>
@@ -76,20 +80,22 @@ export default function EnquiryPopup() {
             onClick={handleClose}
           />
 
-          {/* Modal */}
+          {/* Modal - Full Screen */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
             className={`relative w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-2xl overflow-hidden ${
               isDark ? 'bg-gray-900' : 'bg-white'
             }`}
           >
             {/* Gradient Header */}
-            <div
+            <div 
               className="relative px-8 pt-8 pb-6"
-              style={{ background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})` }}
+              style={{
+                background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`
+              }}
             >
               <button
                 onClick={handleClose}
@@ -97,11 +103,11 @@ export default function EnquiryPopup() {
               >
                 <X className="w-5 h-5" />
               </button>
+
               <div className="flex justify-center mb-4">
-                <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl">
                   <Logo size="sm" animated={true} showText={false} />
-                </div>
               </div>
+
               <h2 className="text-3xl font-bold text-white text-center">
                 Get in Touch with Us
               </h2>
@@ -113,68 +119,61 @@ export default function EnquiryPopup() {
             {/* Form */}
             <form onSubmit={handleSubmit} className="p-8 max-h-[60vh] overflow-y-auto space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Input
-                  placeholder="Your Name *"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                  className={inputClass}
-                />
-                <Input
-                  type="email"
-                  placeholder="Email Address *"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                  className={inputClass}
-                />
+                <div>
+                  <Input
+                    placeholder="Your Name *"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    required
+                    className={`h-12 rounded-xl ${
+                      isDark ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200'
+                    }`}
+                  />
+                </div>
+                <div>
+                  <Input
+                    type="email"
+                    placeholder="Email Address *"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                    className={`h-12 rounded-xl ${
+                      isDark ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200'
+                    }`}
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Input
-                  type="tel"
-                  placeholder="Phone Number"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className={inputClass}
-                />
-
-                {/* ── Native <select> — works inside modals, no z-index issues ── */}
-                <div className="relative">
-                  <select
-                    value={formData.service_interested}
-                    onChange={(e) => setFormData({ ...formData, service_interested: e.target.value })}
-                    className={`w-full h-12 px-4 pr-10 rounded-xl border text-sm appearance-none cursor-pointer
-                      focus:outline-none focus:ring-2 transition-colors
-                      ${isDark
-                        ? 'bg-gray-800 border-gray-700 text-white focus:ring-gray-600'
-                        : 'bg-gray-50 border-gray-200 focus:ring-gray-300'
-                      }
-                      ${!formData.service_interested
-                        ? 'text-gray-400'
-                        : isDark ? 'text-white' : 'text-gray-900'
-                      }`}
+                <div>
+                  <Input
+                    type="tel"
+                    placeholder="Phone Number"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    className={`h-12 rounded-xl ${
+                      isDark ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200'
+                    }`}
+                  />
+                </div>
+                <div>
+                  <Select 
+                    value={formData.service_interested} 
+                    onValueChange={(value) => setFormData({ ...formData, service_interested: value })}
                   >
-                    <option value="" disabled hidden>Service Interested In</option>
-                    {services.map((s) => (
-                      <option
-                        key={s.value}
-                        value={s.value}
-                        className={isDark ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}
-                      >
-                        {s.label}
-                      </option>
-                    ))}
-                  </select>
-                  {/* Chevron icon */}
-                  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                    <svg
-                      className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}
-                      fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </div>
+                    <SelectTrigger className={`h-12 rounded-xl ${
+                      isDark ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200'
+                    }`}>
+                      <SelectValue placeholder="Service Interested In" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {services.map((service) => (
+                        <SelectItem key={service.value} value={service.value}>
+                          {service.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
@@ -192,7 +191,9 @@ export default function EnquiryPopup() {
                 type="submit"
                 disabled={isSubmitting}
                 className="w-full h-12 rounded-xl text-white font-medium"
-                style={{ background: `linear-gradient(135deg, ${colors.secondary}, ${colors.accent})` }}
+                style={{
+                  background: `linear-gradient(135deg, ${colors.secondary}, ${colors.accent})`
+                }}
               >
                 {isSubmitting ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -210,3 +211,9 @@ export default function EnquiryPopup() {
     </AnimatePresence>
   );
 }
+
+
+
+
+
+
