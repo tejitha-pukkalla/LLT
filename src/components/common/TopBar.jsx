@@ -6,7 +6,7 @@ const UNIT = 'Transforming Ideas into Digital Reality \u2022 Web Development \u2
 
 const SOCIALS = [
   { Icon: MessageCircle, href: 'https://wa.me/919502924788', label: 'WhatsApp' },
-  { Icon: Instagram,     href: '#',                           label: 'Instagram' },
+  { Icon: Instagram,     href: 'https://www.instagram.com/logiclifetechnologies/',                           label: 'Instagram' },
   { Icon: Linkedin,      href: '#',                           label: 'LinkedIn'  },
   { Icon: Facebook,      href: '#',                           label: 'Facebook'  },
 ];

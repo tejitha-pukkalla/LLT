@@ -160,8 +160,8 @@ export default function Contact() {
                       Address
                     </div>
                     <div className={isDark ? 'text-gray-400' : 'text-gray-600'}>
-                      123 Tech Park, Innovation District,<br />
-                      Bangalore, India - 560001
+                      Co-away ., Visakhapatnam, Andhra Pradesh,<br />
+                       India
                     </div>
                   </div>
                 </div>
@@ -193,7 +193,7 @@ export default function Contact() {
                 <div className="flex gap-3">
                   {[
                     { icon: MessageCircle, href: "https://wa.me/919502924788", color: "#25D366" },
-                    { icon: Instagram, href: "#", color: "#E4405F" },
+                    { icon: Instagram, href: "https://www.instagram.com/logiclifetechnologies/", color: "#E4405F" },
                     { icon: Linkedin, href: "#", color: "#0A66C2" },
                     { icon: Facebook, href: "#", color: "#1877F2" }
                   ].map((social, i) => (

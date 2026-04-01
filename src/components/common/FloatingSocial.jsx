@@ -5,7 +5,7 @@ import { useTheme } from '../theme/ThemeContext';
 
 const socials = [
   { icon: MessageCircle, href: "https://wa.me/919502924788", label: "WhatsApp", color: "#25D366" },
-  { icon: Instagram, href: "#", label: "Instagram", color: "#E4405F" },
+  { icon: Instagram, href: "https://www.instagram.com/logiclifetechnologies/", label: "Instagram", color: "#E4405F" },
   { icon: Linkedin, href: "#", label: "LinkedIn", color: "#0A66C2" },
   { icon: Facebook, href: "#", label: "Facebook", color: "#1877F2" },
 ];

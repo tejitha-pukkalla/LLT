@@ -54,7 +54,7 @@ export default function Footer() {
             <div className="flex gap-3 mt-6">
               {[
                 { icon: MessageCircle, href: "https://wa.me/919502924788" },
-                { icon: Instagram, href: "#" },
+                { icon: Instagram, href: "https://www.instagram.com/logiclifetechnologies/" },
                 { icon: Linkedin, href: "#" },
                 { icon: Facebook, href: "#" }
               ].map((social, i) => (
@@ -151,7 +151,7 @@ export default function Footer() {
               <li>
                 <div className={`flex items-start gap-3 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                   <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: colors.secondary }} />
-                  <span>123 Tech Park, Innovation District, Bangalore, India - 560001</span>
+                  <span>Co-away ., Visakhapatnam, Andhra Pradesh, India </span>
                 </div>
               </li>
             </ul>
