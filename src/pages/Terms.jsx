@@ -94,10 +94,10 @@ export default function Terms() {
             <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>
               If you have any questions about these Terms, please contact us at{' '}
               <a 
-                href="mailto:legal@logiclife.tech" 
+                href="mailto:bdm@logiclifetechnologies.com" 
                 style={{ color: colors.secondary }}
               >
-                legal@logiclife.tech
+                bdm@logiclifetechnologies.com
               </a>
             </p>
           </div>

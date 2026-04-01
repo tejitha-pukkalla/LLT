@@ -9,7 +9,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { useEffect } from 'react';
 
-// ✅ Page change ayinapratiasaari top ki scroll chestundi
+
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {

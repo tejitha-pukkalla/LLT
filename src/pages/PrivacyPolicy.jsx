@@ -32,7 +32,7 @@ export default function PrivacyPolicy() {
     },
     {
       title: 'Contact Us',
-      content: `If you have any questions about this Privacy Policy, please contact us at info@logiclife.tech or call us at +91 98765 43210.`
+      content: `If you have any questions about this Privacy Policy, please contact us at bdm@logiclifetechnologies.com or call us at +919502924788.`
     }
   ];
 

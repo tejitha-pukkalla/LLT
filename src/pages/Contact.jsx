@@ -105,7 +105,7 @@ export default function Contact() {
 
               <div className="space-y-6 mb-12">
                 <a 
-                  href="tel:+919876543210"
+                  href="tel:+919502924788"
                   className={`flex items-start gap-4 p-4 rounded-2xl transition-colors ${
                     isDark ? 'hover:bg-gray-800' : 'hover:bg-white'
                   }`}
@@ -127,7 +127,7 @@ export default function Contact() {
                 </a>
 
                 <a 
-                  href="mailto:info@logiclife.tech"
+                  href="mailto:bdm@logiclifetechnologies.com"
                   className={`flex items-start gap-4 p-4 rounded-2xl transition-colors ${
                     isDark ? 'hover:bg-gray-800' : 'hover:bg-white'
                   }`}
@@ -143,7 +143,7 @@ export default function Contact() {
                       Email
                     </div>
                     <div className={isDark ? 'text-gray-400' : 'text-gray-600'}>
-                      info@logiclife.tech
+                      bdm@logiclifetechnologies.com
                     </div>
                   </div>
                 </a>
@@ -192,7 +192,7 @@ export default function Contact() {
                 </h3>
                 <div className="flex gap-3">
                   {[
-                    { icon: MessageCircle, href: "https://wa.me/919876543210", color: "#25D366" },
+                    { icon: MessageCircle, href: "https://wa.me/919502924788", color: "#25D366" },
                     { icon: Instagram, href: "#", color: "#E4405F" },
                     { icon: Linkedin, href: "#", color: "#0A66C2" },
                     { icon: Facebook, href: "#", color: "#1877F2" }

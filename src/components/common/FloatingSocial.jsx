@@ -4,7 +4,7 @@ import { MessageCircle, Instagram, Linkedin, Facebook, X } from 'lucide-react';
 import { useTheme } from '../theme/ThemeContext';
 
 const socials = [
-  { icon: MessageCircle, href: "https://wa.me/919876543210", label: "WhatsApp", color: "#25D366" },
+  { icon: MessageCircle, href: "https://wa.me/919502924788", label: "WhatsApp", color: "#25D366" },
   { icon: Instagram, href: "#", label: "Instagram", color: "#E4405F" },
   { icon: Linkedin, href: "#", label: "LinkedIn", color: "#0A66C2" },
   { icon: Facebook, href: "#", label: "Facebook", color: "#1877F2" },

@@ -140,12 +140,12 @@ function CircuitRingAnimation({ colors, isDark }) {
           <circle
   cx="250"
   cy="250"
-  r="115"
+  r="135"
   fill={isDark ? '#ffffff' : '#ffffff'} // ✅ always white
   fillOpacity="1"
 />
           <circle
-            cx="250" cy="250" r="115"
+            cx="250" cy="250" r="135"
             fill="none"
             stroke={primaryColor}
             strokeWidth="1.5"
@@ -154,8 +154,8 @@ function CircuitRingAnimation({ colors, isDark }) {
           {/* Full logo image — icon + LogicLife Technologies + tagline */}
           <image
             href={companyLogo}
-            x="130" y="148"
-            width="240" height="204"
+            x="110" y="128"
+            width="280" height="244"
             style={{ filter: isDark ? 'brightness(1.3) contrast(1.1)' : 'none' }}
           />
         </motion.g>

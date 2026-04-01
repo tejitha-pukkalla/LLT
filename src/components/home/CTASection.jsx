@@ -81,7 +81,7 @@ export default function CTASection() {
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/919502924788" target="_blank" rel="noopener noreferrer">
               <Button 
                 size="lg" 
                 variant="outline"
@@ -102,18 +102,18 @@ export default function CTASection() {
             className="flex flex-wrap justify-center gap-8"
           >
             <a 
-              href="tel:+919876543210"
+              href="tel:+919502924788"
               className="flex items-center gap-2 text-white/80 hover:text-white transition-colors"
             >
               <Phone className="w-5 h-5" />
-              <span>+91 98765 43210</span>
+              <span>+91 95029 24788</span>
             </a>
             <a 
-              href="mailto:info@logiclife.tech"
+              href="mailto:bdm@logiclifetechnologies.com"
               className="flex items-center gap-2 text-white/80 hover:text-white transition-colors"
             >
               <Mail className="w-5 h-5" />
-              <span>info@logiclife.tech</span>
+              <span>bdm@logiclifetechnologies.com</span>
             </a>
           </motion.div>
         </div>

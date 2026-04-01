@@ -22,6 +22,10 @@ const services = [
   { label: 'Mobile Apps', path: 'ServiceDetail?slug=mobile-apps' },
   { label: 'Software Development', path: 'ServiceDetail?slug=software-development' },
   { label: 'Digital Marketing', path: 'ServiceDetail?slug=digital-marketing' },
+  { label: 'UI/UX Design',         path: 'ServiceDetail?slug=ui-ux-design' },
+  { label: 'Cloud Services',       path: 'ServiceDetail?slug=cloud-services' },
+  { label: 'Cybersecurity',        path: 'ServiceDetail?slug=cybersecurity' },
+  { label: 'Support & Maintenance',path: 'ServiceDetail?slug=support-maintenance' },
 ];
 
 export default function Footer() {
@@ -49,7 +53,7 @@ export default function Footer() {
             {/* Social Icons */}
             <div className="flex gap-3 mt-6">
               {[
-                { icon: MessageCircle, href: "https://wa.me/919876543210" },
+                { icon: MessageCircle, href: "https://wa.me/919502924788" },
                 { icon: Instagram, href: "#" },
                 { icon: Linkedin, href: "#" },
                 { icon: Facebook, href: "#" }
@@ -124,24 +128,24 @@ export default function Footer() {
             <ul className="space-y-4">
               <li>
                 <a 
-                  href="tel:+919876543210"
+                  href="tel:+919502924788"
                   className={`flex items-start gap-3 text-sm transition-colors ${
                     isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
                   <Phone className="w-4 h-4 mt-0.5" style={{ color: colors.secondary }} />
-                  <span>+91 98765 43210</span>
+                  <span>+91 95029 24788</span>
                 </a>
               </li>
               <li>
                 <a 
-                  href="mailto:info@logiclife.tech"
+                  href="mailto:bdm@logiclifetechnologies.com"
                   className={`flex items-start gap-3 text-sm transition-colors ${
                     isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
                   <Mail className="w-4 h-4 mt-0.5" style={{ color: colors.secondary }} />
-                  <span>info@logiclife.tech</span>
+                  <span>bdm@logiclifetechnologies.com</span>
                 </a>
               </li>
               <li>

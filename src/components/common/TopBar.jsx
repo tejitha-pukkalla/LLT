@@ -5,7 +5,7 @@ import { useTheme } from '../theme/ThemeContext';
 const UNIT = 'Transforming Ideas into Digital Reality \u2022 Web Development \u2022 Mobile Apps \u2022 Software Solutions \u2022 Digital Marketing \u2022 Cloud Services \u2022\u00a0\u00a0\u00a0\u00a0';
 
 const SOCIALS = [
-  { Icon: MessageCircle, href: 'https://wa.me/919876543210', label: 'WhatsApp' },
+  { Icon: MessageCircle, href: 'https://wa.me/919502924788', label: 'WhatsApp' },
   { Icon: Instagram,     href: '#',                           label: 'Instagram' },
   { Icon: Linkedin,      href: '#',                           label: 'LinkedIn'  },
   { Icon: Facebook,      href: '#',                           label: 'Facebook'  },
@@ -62,7 +62,7 @@ export default function TopBar() {
           display: inline-flex;
           white-space: nowrap;
           will-change: transform;
-          animation: _tb_scroll 25s linear infinite;
+          animation: _tb_scroll 60s linear infinite;
         }
         #_tb_track ._tb_set {
           font-size: 12px;
@@ -128,11 +128,11 @@ export default function TopBar() {
             display: 'flex', alignItems: 'center', gap: '18px',
             flexShrink: 0, whiteSpace: 'nowrap',
           }}>
-            <a href="tel:+919876543210">
-              <Phone size={13} /><span>+91 98765 43210</span>
+            <a href="tel:+919502924788">
+              <Phone size={13} /><span>+91 95029 24788</span>
             </a>
-            <a href="mailto:info@logiclife.tech">
-              <Mail size={13} /><span>info@logiclife.tech</span>
+            <a href="mailto:bdm@logiclifetechnologies.com">
+              <Mail size={13} /><span>bdm@logiclifetechnologies.com</span>
             </a>
           </div>
 
