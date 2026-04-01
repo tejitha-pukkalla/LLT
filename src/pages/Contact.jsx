@@ -121,7 +121,7 @@ export default function Contact() {
                       Phone
                     </div>
                     <div className={isDark ? 'text-gray-400' : 'text-gray-600'}>
-                      +91 98765 43210
+                      +91 95029 24788
                     </div>
                   </div>
                 </a>
