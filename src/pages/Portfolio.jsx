@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Smartphone, Globe, Code } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useTheme } from '../components/theme/ThemeContext';
+import SEOHead from '../components/common/SEOHead';
 
 const projects = [
   {
@@ -76,6 +77,8 @@ const categories = [
 // ── Phone Mockup (mobile projects) ──────────────────────────────────────────
 function PhoneMockup({ project }) {
   return (
+    <>
+    <SEOHead page="portfolio" />
     <div className="relative mx-auto w-44 mb-6" style={{ perspective: '1000px' }}>
       <motion.div
         animate={{ rotateY: [0, 5, 0, -5, 0], rotateX: [0, 2, 0, -2, 0] }}
@@ -136,12 +139,14 @@ function PhoneMockup({ project }) {
         />
       </motion.div>
     </div>
+    </>
   );
 }
 
 // ── Laptop Mockup (web projects) ────────────────────────────────────────────
 function LaptopMockup({ project }) {
   return (
+  
     <div className="relative mx-auto mb-6" style={{ perspective: '1200px' }}>
       <motion.div
         animate={{ rotateX: [0, 2, 0, -1, 0], rotateY: [0, 3, 0, -3, 0] }}
@@ -375,5 +380,7 @@ export default function Portfolio() {
 
       </div>
     </div>
+
   );
+  
 }

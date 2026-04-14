@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Block admin or private areas (add more if needed)
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+
+# Crawl-delay (optional — helps with server load)
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://www.logiclifetechnologies.com/sitemap.xml

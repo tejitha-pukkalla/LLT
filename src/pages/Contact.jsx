@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useTheme } from '../components/theme/ThemeContext';
 import { apiClient } from "@/api/apiClient";
 import { toast } from 'sonner';
+import SEOHead from '../components/common/SEOHead';
 
 const services = [
   { value: 'web_development', label: 'Web Development' },
@@ -38,10 +39,7 @@ export default function Contact() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    await base44.entities.Enquiry.create({
-      ...formData,
-      source: 'contact_page'
-    });
+  await apiClient.post('/enquiries', { ...formData, source: 'contact_page' });
 
     toast.success('Thank you for your message! We will get back to you within 24 hours.');
     setFormData({
@@ -56,6 +54,8 @@ export default function Contact() {
   };
 
   return (
+    <>
+    <SEOHead page="contact" />
     <div className={`pt-32 pb-20 ${isDark ? 'bg-gray-950' : 'bg-white'}`}>
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
         {/* Header */}
@@ -351,5 +351,6 @@ export default function Contact() {
         </div>
       </div>
     </div>
+    </>
   );
 }

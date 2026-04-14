@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useTheme } from '../components/theme/ThemeContext';
+import SEOHead from '../components/common/SEOHead';
 
 const benefits = [
   { icon: Zap, title: 'Learning & Growth', desc: 'Continuous learning opportunities and career growth' },
@@ -82,6 +83,8 @@ export default function Careers() {
   const [expandedJob, setExpandedJob] = useState(null);
 
   return (
+    <>
+    <SEOHead page="careers" />
     <div className={`pt-32 pb-20 ${isDark ? 'bg-gray-950' : 'bg-white'}`}>
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
         {/* Header */}
@@ -247,7 +250,7 @@ export default function Careers() {
                               </li>
                             ))}
                           </ul>
-                          <Button
+                          {/* <Button
                             className="rounded-full text-white"
                             style={{
                               background: `linear-gradient(135deg, ${colors.secondary}, ${colors.accent})`
@@ -255,6 +258,14 @@ export default function Careers() {
                           >
                             Apply Now
                             <ArrowRight className="w-4 h-4 ml-2" />
+                          </Button> */}
+
+                          <Button
+                            onClick={() => window.location.href = `mailto:bdm@logiclifetechnologies.com?subject=Application: ${job.title}`}
+                            className="rounded-full text-white"
+                            style={{ background: `linear-gradient(135deg, ${colors.secondary}, ${colors.accent})` }}
+                          >
+                            Apply Now <ArrowRight className="w-4 h-4 ml-2" />
                           </Button>
                         </div>
                       </div>
@@ -288,5 +299,6 @@ export default function Careers() {
         </motion.div>
       </div>
     </div>
+    </>
   );
 }

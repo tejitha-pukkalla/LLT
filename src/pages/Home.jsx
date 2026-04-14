@@ -8,9 +8,13 @@ import TeamSection from '../components/home/TeamSection';
 import IndustriesSection from '../components/home/IndustriesSection';
 import FAQSection from '../components/home/FAQSection';
 import CTASection from '../components/home/CTASection';
+import SEOHead from '../components/common/SEOHead';
+
 
 export default function Home() {
   return (
+    <>
+    <SEOHead page="home" />
     <div>
       <HeroSection />
       <LogoShowcase />
@@ -22,5 +26,6 @@ export default function Home() {
       <FAQSection />
       <CTASection />
     </div>
+    </>
   );
 }

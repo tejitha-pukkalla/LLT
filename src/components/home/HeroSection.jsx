@@ -248,7 +248,7 @@ export default function HeroSection() {
               </motion.span>
 
               {/* Rotating Word */}
-              <span className="inline-block relative h-[1.2em] w-[220px] align-middle">
+              <span className="inline-block relative h-[1.2em] w-[120px] sm:w-[220px] align-middle">
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={currentWordIndex}

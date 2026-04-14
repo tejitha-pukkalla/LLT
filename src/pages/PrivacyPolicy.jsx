@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../components/theme/ThemeContext';
+import SEOHead from '../components/common/SEOHead';
 
 export default function PrivacyPolicy() {
   const { isDark, colors } = useTheme();
@@ -37,6 +38,8 @@ export default function PrivacyPolicy() {
   ];
 
   return (
+    <>
+    <SEOHead page="privacy-policy" />
     <div className={`pt-32 pb-20 ${isDark ? 'bg-gray-950' : 'bg-white'}`}>
       <div className="max-w-4xl mx-auto px-4 lg:px-8">
         <motion.div
@@ -80,5 +83,6 @@ export default function PrivacyPolicy() {
         </motion.div>
       </div>
     </div>
+    </>
   );
 }

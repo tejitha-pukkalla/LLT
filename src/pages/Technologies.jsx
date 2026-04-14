@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../components/theme/ThemeContext';
+import SEOHead from '../components/common/SEOHead';
 
 const categories = [
   { id: 'frontend', label: 'Frontend' },
@@ -511,6 +512,8 @@ export default function Technologies() {
   const [activeCategory, setActiveCategory] = useState('frontend');
 
   return (
+    <>
+    <SEOHead page="technologies" />
     <div className={`pt-32 pb-20 ${isDark ? 'bg-gray-950' : 'bg-white'}`}>
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
 
@@ -632,5 +635,6 @@ export default function Technologies() {
 
       </div>
     </div>
+    </>
   );
 }

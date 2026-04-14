@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useTheme } from '../components/theme/ThemeContext';
 import { createPageUrl } from '@/utils';
+import SEOHead from '../components/common/SEOHead';
 
 const services = [
   {
@@ -80,6 +81,8 @@ export default function Services() {
   const { isDark, colors } = useTheme();
 
   return (
+    <>
+    <SEOHead page="services" />
     <div className={`pt-32 pb-20 ${isDark ? 'bg-gray-950' : 'bg-white'}`}>
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
         {/* Header */}
@@ -214,5 +217,6 @@ export default function Services() {
         </motion.div>
       </div>
     </div>
+    </>
   );
 }
