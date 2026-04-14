@@ -57,7 +57,7 @@ function AppInner() {
 
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          {/* createPageUrl('Home') }
+          {/* createPageUrl('Home') → /Home  generate  */}
           <Route path="/"                element={<Home />} />
           <Route path="/Home"            element={<Home />} />
 
@@ -67,7 +67,7 @@ function AppInner() {
           <Route path="/Services"        element={<Services />} />
           <Route path="/services"        element={<Services />} />
 
-          {/* ServiceDetail?slug=web-development గా వస్తుంది */}
+          {/* ServiceDetail?slug=web-development  */}
           <Route path="/ServiceDetail"   element={<ServiceDetail />} />
           <Route path="/service-detail"  element={<ServiceDetail />} />
 
